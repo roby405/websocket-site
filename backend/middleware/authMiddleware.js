@@ -13,10 +13,6 @@ const authMiddleware = (req, res, next) => {
     if (!token) {
         return res.status(403).json({ error: "No token provided" });
     }
-
-    if (!token) {
-        return res.status(403).json({ error: "No token provided" });
-    }
     
     jwt.verify(token, "verysecretstring", (err, decoded) => {
         if (err) {

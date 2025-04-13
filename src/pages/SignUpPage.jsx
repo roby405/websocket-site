@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../components/sections/AuthContext.jsx";
 
-export const ServerLocation = "http://localhost:4000";
+const ServerLocation = import.meta.env.VITE_API_BASE_URL;
 
 function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ function SignUpPage() {
       return;
     }
     try {
-      const res = await fetch(`${ServerLocation}/signup`, {
+      const res = await fetch(`${ServerLocation}api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

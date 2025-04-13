@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { createContext, useState, useContext, useEffect } from "react";
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const authContext = createContext();
 
@@ -15,7 +16,7 @@ export function AuthProvider({ children }) {
       try {
         const token = localStorage.getItem("token");
         if (token) {
-          const response = await fetch("http://localhost:4000/whoami", {
+          const response = await fetch(`${API_BASE}api/whoami`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
