@@ -11,6 +11,8 @@ const { sequelize, Message } = require("./models/index");
 const messageRoute = require("./routes/messages");
 const authRoute = require("./routes/auth");
 
+const port = process.env.PORT || 4000;
+
 
 const app = express()
 
@@ -33,11 +35,11 @@ app.use("/api/messages", messageRoute);
 app.use("/api", authRoute);
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, "../dist")));
+  app.use(express.static(path.join(__dirname, "dist")));
 
   // Handle client-side routing
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, "../dist", "index.html"));
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
   });
 }
 
@@ -97,6 +99,6 @@ io.on('connection', (socket) => {
   })
 })
 
-server.listen(4000, () => {
-  console.log("site is up on port 4000")
+server.listen(port, () => {
+  console.log(`site is up on port ${port}`);
 })
