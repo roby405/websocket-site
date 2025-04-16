@@ -81,6 +81,7 @@ io.on('connection', (socket) => {
       io.to(roomId).emit("message", message.get({ plain: true }));
 
     } catch (error) {
+      console.log(`author is ${author}`);
       console.error("Error saving: ", error);
     }
     //     console.log("received message")

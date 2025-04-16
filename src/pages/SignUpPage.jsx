@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../components/sections/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 const ServerLocation = import.meta.env.VITE_API_BASE_URL;
 
@@ -12,6 +13,7 @@ function SignUpPage() {
   });
 
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -38,6 +40,7 @@ function SignUpPage() {
       const token = user.token;
       login(token, user);
       console.log("User signed up successfully:", user);
+      navigate("/");
     } catch (error) {
       console.error("Unable to sign up:", error);
     }

@@ -20,17 +20,17 @@ function MessageBox({ message }) {
   if (username === message.author) {
     // user message
     return (
-      <div className="flex flex-row-reverse items-start group">
-        <div className="bg-zinc-700 pl-2 pr-2 py-1 max-w-[70%] hover:bg-slate-600 rounded-md">
+      <div className="flex flex-row-reverse items-start group gap-2 my-1">
+        <div className="bg-gray-600 px-2 py-1 hover:bg-gray-700 rounded-md">
           <div className="flex flex-row items-baseline gap-1 whitespace-nowrap">
-            <span className="text-zinc-400 font-medium">{message.author}</span>
-            <span className="text-zinc-400 text-xs font-light">
+            <span className="text-gray-300 font-medium">{message.author}</span>
+            <span className="text-gray-300 text-xs font-light">
               {message.createdAt ? "   " + convertDate(message.createdAt) : ""}
             </span>
           </div>
-          <p className="text-left break-words">{message.content}</p>
+          <p className="text-left break-words text-gray-100">{message.content}</p>
         </div>
-        <button className="my-5 mx-2 rounded bg-transparent hover:bg-slate-600 group-hover:opacity-100 opacity-0 transition-opacity duration-100">
+        <button className="mx-2 rounded bg-transparent hover:bg-slate-600 group-hover:opacity-100 opacity-0 transition-opacity duration-100">
           <CopyIcon className="w-5 h-5 text-slate-400" />
         </button>
       </div>
@@ -46,15 +46,15 @@ function MessageBox({ message }) {
   } else {
     // other user message
     return (
-      <div className="flex flex-row group items-start my-1">
-        <div className="bg-zinc-700 pl-2 pr-5 py-1 max-w-[70%] hover:bg-slate-600 rounded-md">
+      <div className="flex flex-row group items-start gap-2 my-1">
+        <div className="bg-gray-500 px-2 py-1 hover:bg-gray-600 rounded-md">
           <div className="flex flex-row items-baseline gap-1 whitespace-nowrap">
-            <span className="text-zinc-400 font-medium">{message.author}</span>
-            <span className="text-zinc-400 text-xs font-light">
+            <span className="text-gray-300 font-medium">{message.author}</span>
+            <span className="text-gray-300 text-xs font-light">
               {message.createdAt ? "   " + convertDate(message.createdAt) : ""}
             </span>
           </div>
-          <p className="text-left break-words">{message.content}</p>
+          <p className="text-left break-words text-gray-100">{message.content}</p>
         </div>
         <button className="mx-2 rounded bg-transparent hover:bg-slate-600 group-hover:opacity-100 opacity-0 transition-opacity duration-200">
           <CopyIcon className="w-5 h-5 text-slate-400" />

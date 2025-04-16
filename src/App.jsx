@@ -23,7 +23,7 @@ function App() {
 
 function Layout() {
   return (
-    <div className="h-screen w-screen flex flex-col">
+    <div className="h-screen w-screen bg-gray-100 flex flex-row">
       <NavBar />
       <div className="flex-1 min-h-0">
         <Outlet />

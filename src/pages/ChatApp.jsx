@@ -85,11 +85,11 @@ function ChatApp() {
   }
 
   return (
-    <div className="bg-slate-950 flex h-full min-h-0">
+    <div className="bg-zinc-100 flex h-full min-h-0">
       <aside
         className={
           (sidebarOpen ? "w-1/6" : "w-20") +
-          " flex flex-col bg-zinc-700 pl-1 pr-2 border-r-2 gap-1 border-zinc-800"
+          " flex flex-col bg-zinc-300 rounded-lg p-4 m-1 border-2 gap-1 border-neutral-300"
         }
       >
         {sidebarOpen ? (
@@ -97,14 +97,14 @@ function ChatApp() {
             className="rounded bg-transparent"
             onClick={() => setSidebarOpen(false)}
           >
-            <CloseSidebarIcon className="w-10 h-10 text-white" />
+            <CloseSidebarIcon className="w-10 h-10" />
           </button>
         ) : (
           <button
             className="rounded bg-transparent"
             onClick={() => setSidebarOpen(true)}
           >
-            <OpenSidebarIcon className="w-10 h-10 text-white" />
+            <OpenSidebarIcon className="w-10 h-10" />
           </button>
         )}
         {sidebarOpen && 
@@ -113,11 +113,11 @@ function ChatApp() {
           ))
         }
       </aside>
-      <main className="flex-grow flex flex-col bg-zinc-600 h-full min-h-0">
+      <main className="flex-grow flex flex-col m-1 rounded-lg border-neutral-300 border-2 bg-gray-300 min-h-0">
         {" "}
         {/* Add min-h-0 here */}
-        <header className="h-12 flex-shrink-0 flex items-center justify-between bg-zinc-700 p-4 border-b-2 border-zinc-800">
-          <h3 className="text-white text-lg font-semibold">
+        <header className="h-12 flex-shrink-0 flex items-center justify-between bg-gray-500 p-4 m-1 border-neutral-300 border-1 rounded-lg">
+          <h3 className="text-gray-100 text-lg font-semibold">
             {"Chat Room " + roomId}
           </h3>
           <div className="flex items-center gap-3 justify-end w-1/4 pr-1">
@@ -142,18 +142,18 @@ function ChatApp() {
             </div>
           ))}
         </section>
-        <footer className="h-16 flex-shrink-0 flex items-center gap-2 p-4 bg-zinc-800">
+        <footer className="h-14 flex-shrink-0 flex items-center gap-2 px-2 py-0 m-1 rounded-lg bg-gray-400">
           <input
             type="text"
             id="messageInput"
             placeholder="Write a message"
             value={newMessage}
             onChange={handleInputChange}
-            className="flex-1 p-2 rounded-lg bg-zinc-700 text-white placeholder-slate-400"
+            className="flex-1 px-2 py-2 text-md rounded-lg bg-gray-500 text-white placeholder-gray-200"
           />
           <button
             onClick={() => sendMessage(newMessage)}
-            className="p-2 bg-zinc-600 text-white rounded-lg hover:bg-zinc-700 transition-colors"
+            className="p-2 bg-gray-500 rounded-lg hover:bg-gray-600 transition-colors"
           >
             <SendIcon className="w-7 h-7" />
           </button>
