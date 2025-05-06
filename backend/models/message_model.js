@@ -1,3 +1,5 @@
+const { DataTypes } = require("sequelize");
+
 module.exports = (sequelize, Sequelize) => {
     return sequelize.define("messages", {
         id: {
@@ -9,13 +11,17 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.TEXT,
             allowNull: false
         },
-        author: {
-            type: Sequelize.STRING,
+        authorId: {
+            type: Sequelize.INTEGER,
             allowNull: false
         },
         roomId: {
             type: Sequelize.INTEGER,
             allowNull: false
-        }
+        },
+        attachments: {
+            type: DataTypes.JSON,
+            allowNull: true
+        },
     });
 };

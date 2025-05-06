@@ -19,9 +19,21 @@ const sequelize = new Sequelize('defaultdb', 'avnadmin', process.env.DB_PASSWORD
 
 const Message = createMessageModel(sequelize, Sequelize);
 const User = createUserModel(sequelize, Sequelize);
-
+// In your models/index.js
+// const SequelizeMeta = sequelize.define('SequelizeMeta', {
+//     name: {
+//       type: Sequelize.STRING(100),
+//       allowNull: false,
+//       unique: true,
+//       primaryKey: true
+//     }
+//   }, {
+//     tableName: 'SequelizeMeta',
+//     timestamps: false
+//   });
 module.exports = {
     sequelize,
     Message,
     User,
+    // SequelizeMeta,
 }

@@ -70,11 +70,52 @@ const whoami = async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
+        usernameColor: user.usernameColor,
+        profilePicture: user.profilePicture,
+        onlineStatus: user.status,
     });
 }
+
+const updateprofile = async (req, res) => {
+    try {
+        const id = req.user.id;
+        const user = await User.findOne({ where: { id } });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const updated = req.body;
+        
+        // Check if username is being changed
+        if (updated.username && updated.username !== user.username) {
+            // Check if new username already exists
+            const existingUser = await User.findOne({ 
+                where: { username: updated.username } 
+            });
+            
+            if (existingUser) {
+                return res.status(409).json({ 
+                    error: "Username already exists" 
+                });
+            }
+        }
+
+        await User.update(updated, { where: { id }});
+        return res.status(200).json({ message: "Profile updated successfully" });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+// const updateProfilePicture = async (req, res) => {
+
+// }
 
 module.exports = {
     signup,
     signin,
-    whoami
+    whoami,
+    updateprofile,
 }

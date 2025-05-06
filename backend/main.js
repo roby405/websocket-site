@@ -10,6 +10,7 @@ const { sequelize, Message } = require("./models/index");
 
 const messageRoute = require("./routes/messages");
 const authRoute = require("./routes/auth");
+// const { runMigrations } = require("./runMigrations");
 
 const port = process.env.PORT || 4000;
 
@@ -26,7 +27,7 @@ const corsOptions = {
   origin: process.env.NODE_ENV === 'production'
     ? ['https://your-render-url.onrender.com']
     : ['http://localhost:5173', 'http://localhost:4000'],
-  methods: ["GET", "POST"]
+  methods: ["GET", "POST", "PATCH"]
 };
 app.use(cors(corsOptions));
 
@@ -48,7 +49,7 @@ const io = new Server(server, {
     origin: process.env.NODE_ENV === 'production'
       ? 'https://your-render-url.onrender.com'
       : 'http://localhost:5173',
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST", "PATCH"]
   },
   transports: ['websocket', 'polling']
 });
@@ -57,31 +58,84 @@ sequelize.authenticate()
   .then(() => console.log('Database connected'))
   .catch(err => console.error('DB connection error:', err));
 
+  // runMigrations(sequelize);
+//   async function dropAllTables() {
+//     try {
+//       // Disable foreign key checks
+//       await sequelize.query('SET FOREIGN_KEY_CHECKS = 0;');
+  
+//       // Get all table names
+//       const [tables] = await sequelize.query(`
+//         SELECT table_name 
+//         FROM information_schema.tables 
+//         WHERE table_schema = DATABASE();
+//       `);
+  
+//       // Drop each table
+//       for (const table of tables) {
+//         const tableName = table.TABLE_NAME;
+//         await sequelize.query(`DROP TABLE IF EXISTS \`${tableName}\`;`);
+//         console.log(`Dropped table ${tableName}`);
+//       }
+  
+//       // Re-enable foreign key checks
+//       await sequelize.query('SET FOREIGN_KEY_CHECKS = 1;');
+  
+//       console.log('All tables nuked!');
+//     } catch (error) {
+//       console.error('Failed to drop tables:', error);
+//     } finally {
+//       await sequelize.close();
+//     }
+//   }
+  
+
+// dropAllTables();
+
 // Sync models
 sequelize.sync();
-
+// runMigrations(sequelize);
 // const Message = require('./models/message_model')(sequelize, Sequelize.DataTypes);
-
-
-// let messageList = []
 
 io.on('connection', (socket) => {
   console.log("new connection")
 
-  socket.emit("message", { author: "system", content: "Welcome" })
+  socket.emit("message", { authorId: 0, content: "Welcome" })
 
-  socket.on("message", async ({ roomId, author, content }) => {
+  socket.on("message", async ({ roomId, authorId, content }) => {
     try {
       const message = await Message.create({
         content,
-        author,
+        authorId,
         roomId
       });
 
       io.to(roomId).emit("message", message.get({ plain: true }));
 
     } catch (error) {
-      console.log(`author is ${author}`);
+      console.log(`author is ${authorId}`);
+      console.error("Error saving: ", error);
+    }
+    //     console.log("received message")
+    //     io.emit("message", {...message, datetime: new Date().toISOString()})
+    // })
+  })
+
+  socket.on("attachmentMessage", async ({ roomId, authorId, attachment }) => {
+    try {
+      const message = await Message.create({
+        content: attachment.url,
+        authorId,
+        roomId,
+        attachments: attachment,
+      });
+
+      io.to(roomId).emit("message", message.get({ plain: true }));
+
+    } catch (error) {
+      console.log(attachment);
+      console.log("life sucks");
+      console.log(`author is ${authorId}`);
       console.error("Error saving: ", error);
     }
     //     console.log("received message")

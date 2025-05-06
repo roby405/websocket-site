@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../components/sections/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,7 @@ function SignInPage() {
     email: "",
     password: "",
   });
-  const { login } = useAuth();
+  const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -30,13 +30,18 @@ function SignInPage() {
       }
       const user = await res.json();
       const token = user.token;
-      login(token, user);
-      console.log("User signed in successfully:", user);
-      navigate("/");
+      login(token, user.id);
     } catch (error) {
       console.error("Unable to sign in:", error);
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log("User is authenticated, redirecting to home page...");
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="flex flex-col h-full py-14 bg-zinc-800">

@@ -38,7 +38,7 @@ function SignUpPage() {
       }
       const user = await res.json();
       const token = user.token;
-      login(token, user);
+      login(token, user.id);
       console.log("User signed up successfully:", user);
       navigate("/");
     } catch (error) {

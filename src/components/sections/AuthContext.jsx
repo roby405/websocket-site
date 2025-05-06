@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { createContext, useState, useContext, useEffect } from "react";
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
+import useFetch from "../../hooks/useFetch";
 
 const authContext = createContext();
 
@@ -8,47 +8,42 @@ export function AuthProvider({ children }) {
   const [authState, setAuthState] = useState({
     token: null,
     isAuthenticated: false,
-    username: null,
+    userId: null,
   });
+
+  const [isLoading, setIsLoading] = useState(true);
+  const { execute } = useFetch("api/whoami");
 
   useEffect(() => {
     const automaticLogin = async () => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
-          const response = await fetch(`${API_BASE}api/whoami`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          const user = await response.json();
-          if (!user) {
-            console.log("Login failed, token is invalid or expired");
-            return;
-          }
+          const user = await execute();
           setAuthState({
             token,
             isAuthenticated: true,
-            username: user.username, // You can fetch the username from your API if needed
+            userId: user.id,
           });
         } else {
           console.log("No token found in localStorage");
         }
       } catch (error) {
         console.error("Error during automatic login:", error);
+        logout();
+      } finally {
+        setIsLoading(false);
       }
     };
     automaticLogin();
-  }, []);
+  }, [execute]);
 
-  const login = (token, username) => {
+  const login = (token, userId) => {
     localStorage.setItem("token", token);
     setAuthState({
       token,
       isAuthenticated: true,
-      username,
+      userId,
     });
   };
 
@@ -57,12 +52,12 @@ export function AuthProvider({ children }) {
     setAuthState({
       token: null,
       isAuthenticated: false,
-      username: null,
+      userId: null,
     });
   };
 
   return (
-    <authContext.Provider value={{ ...authState, login, logout }}>
+    <authContext.Provider value={{ ...authState, login, logout, isLoading }}>
       {children}
     </authContext.Provider>
   );
